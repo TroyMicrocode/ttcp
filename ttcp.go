@@ -30,6 +30,7 @@ type Client struct {
 	chanNotification chan int	//通知心跳检测协程 当前已经退出
 	status int
 	lckStatus sync.Mutex
+	data interface{}
 
 	onCreate      func(* Client)		//连接成功
 	onRecv      func(* Client, *[]byte)		//收到一个完整的包触发 第一个int32必须是包长
@@ -310,6 +311,14 @@ func (this *Client)Close(){
 
 func (this *Client)Send(buf []byte){
 	this.Conn.Write(buf)
+}
+
+func (this *Client)SetData(data interface{}){
+	this.data = data
+}
+
+func (this *Client)GetData() interface{}{
+	return this.data
 }
 
 
