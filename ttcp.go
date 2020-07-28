@@ -115,7 +115,7 @@ func (this *Server)serverClientWork(conn net.Conn) {
 			//只有长度是心跳 回一个
 			log("server收到心跳包\n")
 			if this.timeout != 0 {
-				conn.Write(lengthBuf)
+				client.Send(nil)
 			}
 
 		}else{
@@ -150,14 +150,14 @@ func (this *Server)serverClientWork(conn net.Conn) {
 func (this *Client)clientHeartSend() {
 
 	sendTime := this.lastRecvTime
-	heartPack := []byte{4, 0, 0, 0}
+
 	for {
 		this.lckStatus.Lock()
 		if this.status == ONLINE {
 			if time.Now().UnixNano() / 1e6 - sendTime > this.timeout {
 				//发送一个心跳包
 				sendTime = time.Now().UnixNano() / 1e6
-				this.Conn.Write(heartPack)
+				this.Send(nil)
 			}
 		}else{
 			this.lckStatus.Unlock()
