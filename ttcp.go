@@ -321,6 +321,11 @@ func (this *Client)GetData() interface{}{
 	return this.data
 }
 
+func (this *Client)GetStatus() int{
+	return this.status
+}
+
+
 
 //////////////////////////////////////////////服务器//////////////////////////////////////////////
 //有客户端连上来回调函数
