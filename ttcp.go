@@ -310,7 +310,18 @@ func (this *Client)Close(){
 }
 
 func (this *Client)Send(buf []byte){
-	this.Conn.Write(buf)
+	var dataLen int = 0
+	if buf != nil {
+		dataLen = len(buf)
+	}
+
+	sendBuf := make([]byte, 4 + dataLen)
+
+	binary.LittleEndian.PutUint32(sendBuf[0:4], 4 + uint32(dataLen))
+	if dataLen != 0 {
+		copy(sendBuf[4:], buf)
+	}
+	this.Conn.Write(sendBuf)
 }
 
 func (this *Client)SetData(data interface{}){
